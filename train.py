@@ -28,7 +28,7 @@ def train(model, net, opt, kwargs):
     avatarmodel = AvatarModel(model, net, opt, train=True)
     
     
-    avatarmodel.vis_smpl(viz=False, save_render=True, save_mesh=False, save_params=True, epoch=0, smooth=False)
+    # avatarmodel.vis_smpl(viz=False, save_render=True, save_mesh=False, save_params=True, epoch=0, smooth=False)
     # avatarmodel.vis_smpl_frame(viz=False, save_render=True, save_mesh=True, epoch=0, smooth=False)
 
     loss_fn_vgg = lpips.LPIPS(net='alex').cuda()
