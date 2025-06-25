@@ -6,7 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
-
+data/
 output/
 data/preprocess_data
 data/smpl/smpl/SMPL_FEMALE.pkl

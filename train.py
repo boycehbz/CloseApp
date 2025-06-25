@@ -18,7 +18,7 @@ from utils.general_utils import to_cuda, adjust_loss_weights
 import time
 from utils.module_utils import prepare_output_and_logger
 
-sys.argv = ['', '-s=data/preprocess_data/04305', '-m=output/04305', '--train_stage=1', '--save_render', '--use_appearance', '--save_params']
+# sys.argv = ['', '-s=data/preprocess_data/04305', '-m=output/04305', '--train_stage=1', '--save_render', '--use_appearance', '--save_params']
 
 def train(model, net, opt, kwargs):
     seed = 7
