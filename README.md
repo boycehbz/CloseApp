@@ -7,6 +7,10 @@ The code for CVPR 2025 paper "Reconstructing Close Human Interaction with Appear
 
 ![figure](/assets/teaser.jpg)
 
+<p align="center">
+  <img src="assets/04305.gif" width="49%" />
+  <img src="assets/04313.gif" width="49%" />
+</p>
 
 ## Installation 
 The code is tested on Ubuntu 22.04 with a single RTX 3090 GPU.
@@ -25,6 +29,7 @@ Download the official SMPL model from [SMPL](https://smpl.is.tue.mpg.de/) and [S
 Download data from [Baidu Netdisk](https://pan.baidu.com/s/1CDrDpSZTCiz3A9yUNnMiqw?pwd=y1vt) or [Google Drive](https://drive.google.com/file/d/1kTMD6t-GSJ4tHnC2R19RD7dyMWMXwqsv/view?usp=drive_link).
 
 ![figure](/assets/pipeline.jpg)
+
 
 
 ## Demo
