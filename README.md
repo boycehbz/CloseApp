@@ -48,6 +48,15 @@ If you find this code or dataset useful for your research, please consider citin
   pages={17475--17485},
   year={2025}
 }
+
+@inproceedings{huang2024closely,
+  title={Closely interactive human reconstruction with proxemics and physics-guided adaption},
+  author={Huang, Buzhen and Li, Chen and Xu, Chongyang and Pan, Liang and Wang, Yangang and Lee, Gim Hee},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={1011--1021},
+  year={2024}
+}
+
 ```
 
 ## Acknowledgments

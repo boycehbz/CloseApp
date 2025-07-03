@@ -35,6 +35,7 @@ from scipy import signal
 from utils.vis_params import plot_smpl_params_over_time
 from tqdm import tqdm
 from utils.module_utils import draw_keyp
+from utils.video_processing import *
 
 class AvatarModel:
     def __init__(self, model_parms, net_parms, opt_parms, load_iteration=None, train=True):
@@ -51,10 +52,10 @@ class AvatarModel:
         self.loss_weights = {'reproj': 0.5, 
                              'motion_prior': 1.0, 
                              'transl_prior': 0.0, 
-                             'shape_prior': 0.0, 
+                             'shape_prior': 0.5, 
                              'smoothness': 0.1, 
                              'pen_loss': 0.000,
-                             'contact_loss':0.0, }
+                             'contact_loss':0.5, }
 
         self.loss = {'reproj': 0.0, 
                     'motion_prior': 0.0, 
@@ -679,6 +680,12 @@ class AvatarModel:
                 extri = self.train_dataset.extrinsic
                 save_camparam(os.path.join(save_path, 'camparams.txt'), [intri], [extri])
 
+        src = os.path.join(self.model_path, 'smpl_epoch%04d_%s' %(epoch, m_type), 'images')
+        dst = os.path.join(self.model_path, 'smpl_epoch%04d_%s' %(epoch, m_type), 'video.mp4')
+        generate_mp4(src, dst, output_fps=30)
+
+        
+
     def net_set(self, mode):
         assert mode in [0, 1, 2]
 
@@ -1118,16 +1125,37 @@ class AvatarModel:
         joint_halpe_3d_1 = self.smpl_gpu.J_halpe_regressor @ vertices_1
         joint_halpe_3d = torch.cat([joint_halpe_3d_0, joint_halpe_3d_1], dim=1)  # [T, J, 3]
 
-        # Compute second-order differences (acceleration)
-        acc_halpe_3d = joint_halpe_3d[2:] - 2 * joint_halpe_3d[1:-1] + joint_halpe_3d[:-2]
+        # Weights (optional, can be tuned per joint)
+        weights = torch.ones((1, 26 * 2 * 3), dtype=torch.float32, device='cuda')  # [1, 52]
+        # weights[:, [7,8,9,10,13,14,15,16,20,21,22,23,24,25]] = 0.5
 
-        # Optional: apply weights (if you want per-joint weights)
-        weights = torch.ones((1, 26 * 2 * 3), dtype=torch.float32, device='cuda')  # shape: [1, 52]
-        # weights[:,[7,8,9,10,13,14,15,16,20,21,22,23,24,25]] = 0.5
-        acc_halpe_3d = acc_halpe_3d.reshape(acc_halpe_3d.shape[0], -1)  # [T-2, J*3]
-        weighted_acc = acc_halpe_3d * weights  # broadcasting weights over [T-2, J*3]
+        # 1st-order velocity loss
+        vel = joint_halpe_3d[1:] - joint_halpe_3d[:-1]  # [T-1, J, 3]
+        vel = vel.reshape(vel.shape[0], -1)            # [T-1, J*3]
+        weighted_vel = vel * weights
+        vel_loss = torch.linalg.norm(weighted_vel, dim=-1).mean()
 
-        smoothness_loss = torch.linalg.norm(weighted_acc, dim=-1).mean()
+        # 2nd-order acceleration loss
+        acc = joint_halpe_3d[2:] - 2 * joint_halpe_3d[1:-1] + joint_halpe_3d[:-2]  # [T-2, J, 3]
+        acc = acc.reshape(acc.shape[0], -1)                                       # [T-2, J*3]
+        weighted_acc = acc * weights
+        acc_loss = torch.linalg.norm(weighted_acc, dim=-1).mean()
+
+        # Combine with a balancing factor (tunable)
+        lambda_vel = 0.2  # ← 你可以根据实验调节这个系数，比如 0.1~0.5
+        smoothness_loss = acc_loss + lambda_vel * vel_loss
+
+
+        # # Compute second-order differences (acceleration)
+        # acc_halpe_3d = joint_halpe_3d[2:] - 2 * joint_halpe_3d[1:-1] + joint_halpe_3d[:-2]
+
+        # # Optional: apply weights (if you want per-joint weights)
+        # weights = torch.ones((1, 26 * 2 * 3), dtype=torch.float32, device='cuda')  # shape: [1, 52]
+        # # weights[:,[7,8,9,10,13,14,15,16,20,21,22,23,24,25]] = 0.5
+        # acc_halpe_3d = acc_halpe_3d.reshape(acc_halpe_3d.shape[0], -1)  # [T-2, J*3]
+        # weighted_acc = acc_halpe_3d * weights  # broadcasting weights over [T-2, J*3]
+
+        # smoothness_loss = torch.linalg.norm(weighted_acc, dim=-1).mean()
 
         return smoothness_loss
 

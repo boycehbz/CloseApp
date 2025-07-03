@@ -125,7 +125,7 @@ class MonoDataset_train(Dataset):
         # print('loading smpl data ', join(self.data_folder, 'smpl_parms.pth'))
         # self.smpl_data = torch.load(join(self.data_folder, 'smpl_parms.pth'))
 
-        if 'contact' in self.smpl_data.keys():
+        if self.smpl_data['contact'] is not None:
             rid_to_vid = self.smpl_data['contact']['rid_to_vid']
             contact_label = self.smpl_data['contact']['label']
             assert len(contact_label) == len(self.smpl_data['keypoints'])

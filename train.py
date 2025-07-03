@@ -234,6 +234,8 @@ if __name__ == "__main__":
     print("Optimizing " + args.model_path)
     safe_state(args.quiet)
 
+    print(args.source_path)
+
     torch.autograd.set_detect_anomaly(args.detect_anomaly)
     train(lp.extract(args), np.extract(args), op.extract(args), args)
 
