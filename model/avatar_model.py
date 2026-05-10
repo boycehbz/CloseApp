@@ -4,7 +4,7 @@ import torch
 import os
 import numpy as np
 import torch.nn as nn
-from submodules import smplx
+import smplx
 import trimesh
 from scene.dataset_mono import MonoDataset_train, MonoDataset_test, MonoDataset_novel_pose, MonoDataset_novel_view
 from utils.general_utils import worker_init_fn

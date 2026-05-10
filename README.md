@@ -36,6 +36,8 @@ Download data from [Baidu Netdisk](https://pan.baidu.com/s/1CDrDpSZTCiz3A9yUNnMi
 ```
 python train.py -s data/preprocess_data/04305 -m output/04305 --train_stage=1 --save_render --use_appearance --save_params
 ```
+## Data processing
+To process your own images, please refer to the [Data Processing Tutorial](./data_processing/README.md).
 
 
 ## Citation

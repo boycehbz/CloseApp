@@ -180,3 +180,17 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# data_processing weights
+data_processing/.vscode/
+
+data_processing/data/
+
+data_processing/pretrained/
+data_processing/smpl/
+data_processing/output/
+#
+
+
+
