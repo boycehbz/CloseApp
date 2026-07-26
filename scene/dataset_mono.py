@@ -318,7 +318,7 @@ class MonoDataset_train(Dataset):
                 mask[mask < 128] = 0
                 mask[mask >= 128] = 1
                 color_img = image * mask + (1 - mask) * 255
-                image = Image.fromarray(np.array(color_img, dtype=np.byte), "RGB")
+                image = Image.fromarray(np.asarray(color_img, dtype=np.uint8), "RGB")
             
             data_item = dict()
             if self.dataset_parms.train_stage == 2:
