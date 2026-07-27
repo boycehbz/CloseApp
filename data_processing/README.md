@@ -46,7 +46,7 @@ out = 'output/preprocess_data'
 
 ## Download
 
-Download the pretrained models from [Baidu Netdisk](https://pan.baidu.com/s/1VutLOlsraOQMaYijZuQ88A?pwd=dyxe).
+Download the pretrained models from [Baidu Netdisk](https://pan.baidu.com/s/1hf_C7ujhxOfCj8AFfyBd8w?pwd=tb3g).
 
 Download the smpl models from [Baidu Netdisk](https://pan.baidu.com/s/1ICN1pMd05BYJdsjzvNcrWw?pwd=ehbk).
 
